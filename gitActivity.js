@@ -10,7 +10,7 @@ let apiData;
 console.log(chalk.yellow(dataPath));
 
 if(!fs.existsSync('apiData.json')){
-        fs.writeFileSync('apiData.json',JSON.stringify(emptyArray,null,2),utf8);
+        fs.writeFileSync('apiData.json',JSON.stringify(emptyArray,null,2),'utf8');
     }
 /*
 const apiData = fs.writeFileSync('apiData.json',fetch(dataPath),utf8);
@@ -21,12 +21,23 @@ console.log(chalk.yellow("Code executed!"));
 async function fetchData(){
         const apiData = await fetch(dataPath);
         if(!apiData.ok){
-            console.log("Data not fetched from API");
+            console.log("Data not fetched from API. Check if the username is valid!");
+            return;
         }
         const data = await apiData.json();
         const dataToWrite = JSON.stringify(data,null,2);
 
         fs.writeFileSync('apiData.json',dataToWrite,'utf8');
+        let dataFromFile = fs.readFileSync('apiData.json','utf8');
+        let parsedData = JSON.parse(dataFromFile);
+
+        console.log(parsedData);
+        fs.writeFileSync('apiData.json',JSON.stringify(emptyArray,null,2),'utf8');
 }
 
 fetchData();
+
+
+
+
+
