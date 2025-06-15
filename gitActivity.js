@@ -18,7 +18,7 @@ This approach doesn't work, have to use async
 console.log(chalk.yellow("Code executed!"));
 */
 
-async function fetchData(){
+async function fetchAndDisplayData(){
         const apiData = await fetch(dataPath);
         if(!apiData.ok){
             console.log("Data not fetched from API. Check if the username is valid!");
@@ -31,11 +31,25 @@ async function fetchData(){
         let dataFromFile = fs.readFileSync('apiData.json','utf8');
         let parsedData = JSON.parse(dataFromFile);
 
-        console.log(parsedData);
+        //console.log(parsedData);
+        
+        let commitCount = 0;
+        let newRepo = 0;
+        for(let i=0; i<parsedData.length; i++){
+            if(parsedData[i].payload.commits){
+                commitCount++;
+            }
+            if(parsedData[i].type==="CreateEvent"){
+                newRepo++;
+            }
+        }
+        console.log("The user has pushed "+commitCount+" commits.");
+        console.log("The user has created "+newRepo+" new repositories.");
+
         fs.writeFileSync('apiData.json',JSON.stringify(emptyArray,null,2),'utf8');
 }
 
-fetchData();
+fetchAndDisplayData();
 
 
 
